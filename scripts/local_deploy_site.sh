@@ -1,12 +1,11 @@
 #!/bin/bash
 set -euxo pipefail
 
-scripts/build_site.sh web/local-config.json
+cd examples/simple-chat
+rm -rf lib
+npm run build
+cd ../..
 
-echo "symlink parameter location to site.."
+cp examples/simple-chat/lib/* site
 
-if [ -d "dist/vicuna-7b-v1/params" ]; then
-    rm -rf site/_site/vicuna-7b-v1-params
-    ln -s `pwd`/dist/vicuna-7b-v1/params site/_site/vicuna-7b-v1-params
-fi
-cd site && jekyll serve  --skip-initial-build --host localhost --baseurl /web-llm --port 8888
+cd site && jekyll serve  --host localhost --port 8888
